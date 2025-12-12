@@ -37,23 +37,6 @@ export default function UsersList() {
         }
     };
 
-    // const handleEdit = async (id) => {
-    //     const newRole = window.prompt("Enter new role (admin/owner/user) : ");
-    //     if(!newRole) return;
-    //     try {
-    //         const response = await axios.put(`/user/update/${id}`, 
-    //             { role : newRole }, 
-    //             { headers: { Authorization: localStorage.getItem('token')} 
-    //         });
-    //         setUsers(prev => 
-    //             prev.map(ele => 
-    //                 ele._id == id ? { ...ele, role: response.data.user.role } : ele
-    //             ));
-    //     } catch(err) {
-    //         console.log(err);
-    //     }
-    // }
-
     const handleEdit = async (id, oldRole) => {
         const newRole = window.prompt("Enter new role (admin/owner/user):", oldRole);
         if (!newRole) return;

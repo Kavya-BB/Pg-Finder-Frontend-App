@@ -1,49 +1,56 @@
-import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function AdminDashboard() {
-    const { data, loading, errors } = useSelector((state) => {
-        return state.pg;
-    });
-
-    if(loading) {
-        return <p> Loading PG data... </p>
-    };
-
-    if(errors) {
-        return <p style={{ color: 'red' }}> { errors.message } </p>
-    }
-
+        
     return (
-        <div>
+        <div style={{ padding: "20px" }}>
             <h1> Admin Dashboard Page </h1>
-            <p> Manage Users and PGs here </p>
+            <b>Manage Users, Owners and PG Approvals</b>
 
-            <p> Total Pgs - { data.length } </p>
-            <p> Approved Pgs - { data.filter(pg => pg.approved).length } </p>
-            <p> Pending Pgs - { data.filter(pg => !pg.approved).length } </p>
+            <div style={{
+                display: "flex",
+                gap: "20px",
+                marginTop: "20px"
+            }}>
 
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th> PG Name </th>
-                        <th> Location </th>
-                        <th> verified </th>
-                        <th> Approved </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        data.map(pg => (
-                            <tr key={pg._id}>
-                                <td> { pg.pgname } </td> 
-                                <td> { pg.location?.address } </td>
-                                <td> { pg.verified ? "Yes" : "No" } </td>
-                                <td> { pg.approved ? "Yes" : "No" } </td>
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </table>
+                <div style={cardStyle}>
+                    <b> Total Users </b>
+                    <p> View & manage all registered users </p>
+                    <Link to="/users-list">
+                        <button style={btnStyle}> Manage Users </button>
+                    </Link>
+                </div>
+
+                <div style={cardStyle}>
+                    <b> Total PGs</b>
+                    <p> Approve / Reject PGs submitted by owners </p>
+                    <Link to="/pg-list">
+                        <button style={btnStyle}>Approve / Reject PGs submitted by owners</button>
+                    </Link>
+                </div>
+
+                <div style={cardStyle}>
+                    <b> Reports </b>
+                    <p> Analytics & System Reports </p>
+                    <button style={btnStyle}> View Reports</button>
+                </div>
+
+            </div>
         </div>
     )
 }
+
+const cardStyle = {
+    width: "300px",
+    padding: "20px",
+    borderRadius: "10px",
+    border: "1px solid #ccc",
+    background: "#f9f9f9"
+};
+
+const btnStyle = {
+    marginTop: "10px",
+    padding: "10px",
+    width: "100%",
+    cursor: "pointer"
+};

@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import Account from "./pages/Account";
 import UsersList from "./pages/UsersList";
 import PgList from "./pages/PgList";
+import PGDetails from "./pages/PGDetails";
 import { resetPg } from "./slices/pg-slice";
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
             <li> <Link to="/account"> Account </Link> </li>
             { (user.role == "admin" || user.role == "owner") && <li> <Link to="/users-list"> List Users </Link> </li> }
             <li> <Link to="/pg-list"> Pg Lists </Link> </li>
+            <li> <Link to="/pg-details:id"> Pg Details </Link> </li>
             <li> <Link to="/" onClick={() => {
               handleLogout();
               dispatch(resetPg());
@@ -53,6 +55,7 @@ export default function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/users-list" element={<UsersList />} />
         <Route path="/pg-list" element={<PgList />} />
+        <Route path="/pg-details:id" element={<PGDetails />} />
       </Routes>
 
     </div>
