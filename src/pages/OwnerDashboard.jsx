@@ -18,15 +18,39 @@ export default function OwnerBookings() {
                 </div>
 
                 <div style={cardStyle}>
-                    <b> Add New PG </b>
-                    <p> Add a new PG property </p>
-                    <button style={btnStyle}> Add PG </button>
+                    <b> Add & edit PG </b>
+                    <p> Add or Edit PG property </p>
+                    <button style={btnStyle}> Ada/Edit PG </button>
                 </div>
 
                 <div style={cardStyle}>
                     <b> Pending Approvals </b>
                     <p> Verify status of your PG approvals </p>
                     <button style={btnStyle}> Check Status </button>
+                </div>
+
+                <div style={cardStyle}>
+                    <b> View Bookings </b>
+                    <p> View bookings for my PGs </p>
+                    <button style={btnStyle}> Check Bookings </button>
+                </div>
+
+                <div style={cardStyle}>
+                    <b> View Pendings </b>
+                    <p> View bookings pending for my PGs </p>
+                    <button style={btnStyle}> Pending Bookings </button>
+                </div>
+
+                <div style={cardStyle}>
+                    <b> Total Earnings </b>
+                    <p> View payment info related to my PGs </p>
+                    <button style={btnStyle}> View Earnings </button>
+                </div>
+
+                <div style={cardStyle}>
+                    <b> Total Ratings </b>
+                    <p> View ratings for my PGs </p>
+                    <button style={btnStyle}> Ratings received </button>
                 </div>
 
             </div>

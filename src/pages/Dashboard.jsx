@@ -33,9 +33,4 @@ export default function Dashboard(props) {
         return <p> Normal Dashboard Page </p>
     }
 
-    return (
-        <div>
-            <h1> Dashboard Page </h1>
-        </div>
-    )
 }

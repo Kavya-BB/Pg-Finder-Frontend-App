@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "../config/axios";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
+import { Link } from "react-router-dom";
 
 export default function UsersList() {
     const { user } = useContext(UserContext);
@@ -96,6 +97,14 @@ export default function UsersList() {
                     }
                 </tbody>
             </table>
+
+            <br />
+
+            <div>
+                <Link to="/dashboard">
+                    <button> Back to Dashboard </button>
+                </Link>
+            </div>
         </div>
     )
 }

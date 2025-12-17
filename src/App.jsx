@@ -1,6 +1,6 @@
 import "./App.css";
 import { Link, Route, Routes } from 'react-router-dom';
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import UserContext from "./context/UserContext";
 import { useDispatch } from "react-redux";
 
@@ -13,10 +13,20 @@ import UsersList from "./pages/UsersList";
 import PgList from "./pages/PgList";
 import PGDetails from "./pages/PGDetails";
 import { resetPg } from "./slices/pg-slice";
+import { fetchPgData, fetchPublicPgData } from "./slices/pg-slice";
 
 export default function App() {
   const dispatch = useDispatch();
   const { isLoggedIn, handleLogout, user } = useContext(UserContext);
+
+  useEffect(() => {
+    if (!user) return;
+    if(user.role == "admin" || user.role == "owner") {
+      dispatch(fetchPgData());
+    } else if(user.role == "user") {
+      dispatch(fetchPublicPgData());
+    }
+  }, [dispatch]);
 
   return (
     <div>
@@ -31,7 +41,7 @@ export default function App() {
             <li> <Link to="/account"> Account </Link> </li>
             { (user.role == "admin" || user.role == "owner") && <li> <Link to="/users-list"> List Users </Link> </li> }
             <li> <Link to="/pg-list"> Pg Lists </Link> </li>
-            <li> <Link to="/pg-details:id"> Pg Details </Link> </li>
+            <li> <Link to="/pg-details/:id"> Pg Details </Link> </li>
             <li> <Link to="/" onClick={() => {
               handleLogout();
               dispatch(resetPg());
@@ -55,7 +65,7 @@ export default function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/users-list" element={<UsersList />} />
         <Route path="/pg-list" element={<PgList />} />
-        <Route path="/pg-details:id" element={<PGDetails />} />
+        <Route path="/pg-details/:id" element={<PGDetails />} />
       </Routes>
 
     </div>

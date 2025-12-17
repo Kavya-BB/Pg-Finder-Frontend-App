@@ -24,6 +24,24 @@ export default function UserDashboard() {
             </div>
 
             <div style={cardStyle}>
+                <b> view bookings </b>
+                <p> View my booking/Make new bookings </p>
+                <button style={btnStyle}> My Bookings </button>
+            </div>
+
+            <div style={cardStyle}>
+                <b> Add ratings </b>
+                <p> View my ratings for PGs </p>
+                <button style={btnStyle}> My Ratings </button>
+            </div>
+
+            <div style={cardStyle}>
+                <b> Make payments </b>
+                <p> View my payments for PGs </p>
+                <button style={btnStyle}> My Payments </button>
+            </div>
+
+            <div style={cardStyle}>
                 <b> My Profile </b>
                 <p> Update your personal details </p>
                 <button style={btnStyle}> Edit Profile </button>

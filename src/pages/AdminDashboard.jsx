@@ -22,11 +22,35 @@ export default function AdminDashboard() {
                 </div>
 
                 <div style={cardStyle}>
+                    <b> Total Owners </b>
+                    <p> View & manage all registered owners </p>
+                    <button style={btnStyle}> Manage Owners </button>
+                </div>
+
+                <div style={cardStyle}>
                     <b> Total PGs</b>
-                    <p> Approve / Reject PGs submitted by owners </p>
+                    <p> View & manage PGs submitted by owners </p>
                     <Link to="/pg-list">
-                        <button style={btnStyle}>Approve / Reject PGs submitted by owners</button>
+                        <button style={btnStyle}> Manage PGs </button>
                     </Link>
+                </div>
+
+                <div style={cardStyle}>
+                    <b> Total Bookings </b>
+                    <p> View & manage all registered Bookings </p>
+                    <button style={btnStyle}> Manage Bookings </button>
+                </div>
+
+                <div style={cardStyle}>
+                    <b> Total Payments </b>
+                    <p> View all payments </p>
+                    <button style={btnStyle}> View Payments </button>
+                </div>
+
+                <div style={cardStyle}>
+                    <b> Total Ratings </b>
+                    <p> View all Ratings for PGs </p>
+                    <button style={btnStyle}> View Ratings </button>
                 </div>
 
                 <div style={cardStyle}>
