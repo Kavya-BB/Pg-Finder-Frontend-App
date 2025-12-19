@@ -12,6 +12,7 @@ import Account from "./pages/Account";
 import UsersList from "./pages/UsersList";
 import PgList from "./pages/PgList";
 import PGDetails from "./pages/PGDetails";
+import PgForm from "./pages/PgForm";
 import { resetPg } from "./slices/pg-slice";
 import { fetchPgData, fetchPublicPgData } from "./slices/pg-slice";
 
@@ -42,6 +43,7 @@ export default function App() {
             { (user.role == "admin" || user.role == "owner") && <li> <Link to="/users-list"> List Users </Link> </li> }
             <li> <Link to="/pg-list"> Pg Lists </Link> </li>
             <li> <Link to="/pg-details/:id"> Pg Details </Link> </li>
+            { (user.role == "owner") && <li> <Link to="/pg-form"> Pg Form </Link> </li> }
             <li> <Link to="/" onClick={() => {
               handleLogout();
               dispatch(resetPg());
@@ -66,6 +68,7 @@ export default function App() {
         <Route path="/users-list" element={<UsersList />} />
         <Route path="/pg-list" element={<PgList />} />
         <Route path="/pg-details/:id" element={<PGDetails />} />
+        <Route path="/pg-form" element={<PgForm />} />
       </Routes>
 
     </div>

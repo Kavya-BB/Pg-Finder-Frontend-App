@@ -6,18 +6,18 @@ import AdminDashboard from "./AdminDashboard";
 import OwnerDashboard from "./OwnerDashboard";
 import UserDashboard from "./UserDashboard";
 
-export default function Dashboard(props) {
+export default function Dashboard() {
     const dispatch = useDispatch();
     const { user } = useContext(UserContext);
 
     useEffect(() => {
         if (!user) return;
-        if(user.role == "admin" || user.role == "owner") {
+        if(user.role === "admin" || user.role === "owner") {
             dispatch(fetchPgData());
-        } else if(user.role == "user") {
+        } else if(user.role === "user") {
             dispatch(fetchPublicPgData());
         }
-    }, [dispatch]);
+    }, [dispatch, user]);
 
     if(!user) {
         return <p> loading... </p>

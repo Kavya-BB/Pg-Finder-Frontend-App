@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import axios from "../config/axios";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function UsersList() {
     const { user } = useContext(UserContext);
     const [users, setUsers] = useState([]);
+    const location = useLocation();
+    const listType = location.state?.type;
+
 
     useEffect(() => {
         const fetchUsersList = async () => {
@@ -19,6 +22,13 @@ export default function UsersList() {
         }
         fetchUsersList();
     }, []);
+
+    const filteredUsers = users.filter((u) => {
+        if (listType === "user") return u.role === "user";
+        if (listType === "owner") return u.role === "owner";
+        return true;
+    });
+
 
     const handleRemove = async (id, email) => {
         const userConfirmation = window.confirm("Are you sure?");
@@ -79,18 +89,21 @@ export default function UsersList() {
                 </thead>
                 <tbody>
                     {
-                        users.map((ele) => {
+                        filteredUsers.map((ele) => {
                             return (
                                 <tr key={ele._id}>
                                     <td> {ele.name} </td>
                                     <td> {ele.email} </td>
                                     <td> {ele.role} </td>
-                                    { user?.role == "admin" && <td> {user?._id != ele._id && <button onClick={() => {
+
+                                    { user?.role == "admin" && <td> {user?._id !== ele._id && <button onClick={() => {
                                         handleRemove(ele._id, ele.email)
                                     }}> remove </button>} </td> }
-                                    { user?.role == "admin" && <td> {user?._id != ele._id && <button onClick={() => {
+
+                                    { user?.role == "admin" && <td> {user?._id !== ele._id && <button onClick={() => {
                                         handleEdit(ele._id)
                                     }}> edit </button>} </td> }
+                                    
                                 </tr>
                             )
                         })

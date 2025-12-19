@@ -16,7 +16,7 @@ export default function AdminDashboard() {
                 <div style={cardStyle}>
                     <b> Total Users </b>
                     <p> View & manage all registered users </p>
-                    <Link to="/users-list">
+                    <Link to="/users-list" state={{ type: "user" }}>
                         <button style={btnStyle}> Manage Users </button>
                     </Link>
                 </div>
@@ -24,7 +24,9 @@ export default function AdminDashboard() {
                 <div style={cardStyle}>
                     <b> Total Owners </b>
                     <p> View & manage all registered owners </p>
-                    <button style={btnStyle}> Manage Owners </button>
+                    <Link to="/users-list" state={{ type: "owner" }}>
+                        <button style={btnStyle}> Manage Owners </button>
+                    </Link>
                 </div>
 
                 <div style={cardStyle}>

@@ -91,22 +91,20 @@ export default function PGDetails() {
             <p>
                 <strong> Rating: </strong> { selectedPg.rating }
             </p>
-
-            <p>
-                <strong>
-                    <button> verifyPgCertificate </button>
-                </strong>
-            </p>
-
-            <p>
-                <strong>
-                    <button> Pg Approval </button>
-                </strong>
-            </p>
             
+            {/* <p>
+                <strong>
+                    { user.role === "owner" && selectedPg.ownerId === user._id && (
+                        <Link to={`/edit-pg/${selectedPg._id}`}>
+                            <button> Edit PG </button>
+                        </Link>
+                    )}
+                </strong>
+            </p> */}
+
             <p>
                 <strong>
-                    <button> edit pg </button>
+                    <button> Edit PG </button>
                 </strong>
             </p>
 
