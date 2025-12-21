@@ -48,7 +48,7 @@ export default function OwnerDashboard() {
                     <h3> Pending Approval </h3>
                     <h2> { pendingPgs } </h2>
                     <p> PGs pending admin approval </p>
-                    <Link to="/pg-list">
+                    <Link to="/pg-list" state={{ filter: "pending" }}>
                         <button style={btnStyle}> View Pending PGs </button>
                     </Link>
                 </div>
@@ -57,7 +57,7 @@ export default function OwnerDashboard() {
                     <h3> Verified PGs </h3>
                     <h2> { verifiedPgs } </h2>
                     <p> PGs with verified certificates </p>
-                    <Link to="/pg-list">
+                    <Link to="/pg-list" state={{ filter: "verified" }}>
                         <button style={btnStyle}> View Verified PGs </button>
                     </Link>
                 </div>
@@ -74,8 +74,15 @@ export default function OwnerDashboard() {
                 <div style={cardStyle}>
                     <h3> View Bookings for PG </h3>
                     <h2> {  } </h2>
-                    <p> View all bookings for your PGs </p>
+                    <p> View all bookings for my PGs </p>
                     <button style={btnStyle}> View Bookings </button>
+                </div>
+
+                <div style={cardStyle}>
+                    <h3> View Payments for PG </h3>
+                    <h2> {  } </h2>
+                    <p> View all payments for my PGs </p>
+                    <button style={btnStyle}> View Payments </button>
                 </div>
 
             </div>
