@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPgById } from "../slices/pg-slice";
@@ -6,6 +6,7 @@ import { fetchPgById } from "../slices/pg-slice";
 export default function PGDetails() {
     const { id } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { selectedPg, loading, errors } = useSelector((state) => {
         return state.pg;
@@ -91,20 +92,12 @@ export default function PGDetails() {
             <p>
                 <strong> Rating: </strong> { selectedPg.rating }
             </p>
-            
-            {/* <p>
-                <strong>
-                    { user.role === "owner" && selectedPg.ownerId === user._id && (
-                        <Link to={`/edit-pg/${selectedPg._id}`}>
-                            <button> Edit PG </button>
-                        </Link>
-                    )}
-                </strong>
-            </p> */}
 
             <p>
                 <strong>
-                    <button> Edit PG </button>
+                    <button onClick={() => navigate(`/pg-form/${selectedPg._id}`)}>
+                        Edit PG
+                    </button>
                 </strong>
             </p>
 

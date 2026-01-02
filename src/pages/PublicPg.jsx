@@ -65,6 +65,12 @@ export default function PublicPg() {
             <br /> <br />
 
             <div>
+                <Link to={`/room-bookings/${pg._id}`}>
+                    <button>Book Now</button>
+                </Link>
+            </div>
+
+            <div>
                 <Link to="/dashboard">
                     <button> Back to Dashboard </button>
                 </Link>

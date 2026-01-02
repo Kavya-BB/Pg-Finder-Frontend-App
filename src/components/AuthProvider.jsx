@@ -11,6 +11,9 @@ const reducer = (state, action) => {
         case "Logout" : {
             return { ...state, isLoggedIn: false, user: null };
         }
+        case "UpdateUser" : {
+            return { ...state, user: action.payload };
+        }
         case "ServerErrors" : {
             return { ...state, serverErrors: action.payload };
         }

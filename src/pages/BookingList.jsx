@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOwnerBookings, confirmBooking } from "../slices/booking-slice";
+import { fetchAllBookings } from "../slices/booking-slice";
 
-export default function OwnerBookings() {
+export default function BookingList() {
     const dispatch = useDispatch();
     const { data, loading, errors } = useSelector((state) => {
         return state.booking;
     });
 
     useEffect(() => {
-        dispatch(fetchOwnerBookings());
+        dispatch(fetchAllBookings());
     }, [dispatch]);
 
     if(loading) {
@@ -20,10 +20,11 @@ export default function OwnerBookings() {
     if(errors) {
         return <p style={{ color: "red" }}> {errors.error} </p>
     }
-
+    
     return (
         <div>
-            <h1> My PG Bookings </h1>
+            <h1> All Booking List </h1>
+
             { data.length == 0 ? ( <p> No bookings found </p> ) : (
                 <table border="1" cellPadding="10">
                     <thead>
@@ -48,22 +49,12 @@ export default function OwnerBookings() {
                                 <td> { ele.roomType } </td>
                                 <td> { ele.duration } - { ele.durationType } </td>
                                 <td> ₹{ ele.amount } </td>
-                                <td>
-                                    { ele.status === "pending" ? (
-                                        <button onClick={() => dispatch(confirmBooking(ele._id))}>
-                                            Confirm
-                                        </button>
-                                    ) : (
-                                        ele.status
-                                    )}
-                                </td>
+                                <td> { ele.status } </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             ) }
-
-            <br />
 
             <div>
                 <Link to="/dashboard">

@@ -40,7 +40,9 @@ export default function AdminDashboard() {
                 <div style={cardStyle}>
                     <b> Total Bookings </b>
                     <p> View & manage all registered Bookings </p>
-                    <button style={btnStyle}> Manage Bookings </button>
+                    <Link to="/booking-list">
+                        <button style={btnStyle}> Manage Bookings </button>
+                    </Link>
                 </div>
 
                 <div style={cardStyle}>

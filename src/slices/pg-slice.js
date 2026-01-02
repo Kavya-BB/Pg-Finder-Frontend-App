@@ -12,6 +12,34 @@ export const fetchPgData = createAsyncThunk("pg/fetchPgData", async (undefined, 
     }
 });
 
+export const createPg = createAsyncThunk("pg/createPg", async (formData, { rejectWithValue }) => {
+    try {
+        const response = await axios.post("/pg/createpg", formData, { 
+            headers: { 
+                Authorization: localStorage.getItem('token')
+            }
+        });
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.response.data);
+    }
+});
+
+export const updatePg  = createAsyncThunk("pg/updatePg", async ({ id, formData }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/update/pg/${id}`, formData, { 
+            headers: { 
+                Authorization: localStorage.getItem('token')
+            }
+        });
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.response.data);
+    }
+});
+
 export const fetchPublicPgData = createAsyncThunk("pg/fetchPublicPgData", async (undefined, { rejectWithValue }) => {
     try {
         const response = await axios.get('/get/pglists', { headers: { Authorization: localStorage.getItem('token')} });
@@ -99,6 +127,35 @@ const pgSlice = createSlice({
                 state.loading = false;
                 state.errors = action.payload;
             })
+            .addCase(createPg.pending, (state) => {
+                state.loading = true;
+                state.errors = null;
+            })
+            .addCase(createPg.fulfilled, (state, action) => {
+                state.loading = false;
+                state.data.push(action.payload);
+                state.errors = null;
+            })
+            .addCase(createPg.rejected, (state, action) => {
+                state.loading = false;
+                state.errors = action.payload;
+            })
+            .addCase(updatePg.fulfilled, (state, action) => {
+                state.loading = false;
+                const updatedPg = action.payload;
+                const index = state.data.findIndex(pg => pg._id === updatedPg._id);
+                if (index !== -1) state.data[index] = updatedPg;
+                if (state.selectedPg?._id === updatedPg._id) state.selectedPg = updatedPg;
+                state.errors = null;
+            })
+            .addCase(updatePg.pending, (state) => {
+                state.loading = true;
+                state.errors = null;
+            })
+            .addCase(updatePg.rejected, (state, action) => {
+                state.loading = false;
+                state.errors = action.payload;
+            })
             .addCase(fetchPublicPgData.pending, (state) => {
                 state.loading = true;
                 state.errors = null;
@@ -174,7 +231,7 @@ const pgSlice = createSlice({
             })
             .addCase(deletePg.fulfilled, (state, action) => {
                 state.loading = false;
-                const deletedPgId = action.payload.pg._id;
+                const deletedPgId = action.payload._id || action.payload.pg?._id;
                 state.data = state.data.filter(pg => pg._id !== deletedPgId);
                 if(state.selectedPg?._id === deletedPgId) {
                     state.selectedPg = null;

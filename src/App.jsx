@@ -14,7 +14,13 @@ import PgList from "./pages/PgList";
 import PGDetails from "./pages/PGDetails";
 import PgForm from "./pages/PgForm";
 import PublicPg from "./pages/PublicPg";
+import EditProfile from "./pages/EditProfile";
+import BookingList from "./pages/BookingList";
+import OwnerBookings from "./pages/OwnerBookings";
+import UserBookings from "./pages/UserBookings";
+import RoomBooking from "./pages/RoomBooking";
 import { resetPg } from "./slices/pg-slice";
+import { resetUser } from "./slices/user-slice";
 import { fetchPgData, fetchPublicPgData } from "./slices/pg-slice";
 
 export default function App() {
@@ -28,7 +34,7 @@ export default function App() {
     } else if(user.role == "user") {
       dispatch(fetchPublicPgData());
     }
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   return (
     <div>
@@ -44,11 +50,17 @@ export default function App() {
             { (user.role == "admin" || user.role == "owner") && <li> <Link to="/users-list"> List Users </Link> </li> }
             <li> <Link to="/pg-list"> Pg Lists </Link> </li>
             <li> <Link to="/pg-details/:id"> Pg Details </Link> </li>
-            { (user.role == "owner") && <li> <Link to="/pg-form"> Pg Form </Link> </li> }
-            <li> <Link to="/public-pg/:id"> Public PG Page </Link> </li>
+            { (user.role == "owner") && <li> <Link to="/pg-form"> Add PG </Link> </li> }
+            { (user.role == "user") && <li> <Link to="/public-pg/:id"> Public PG Page </Link> </li> }
+            <li> <Link to={`/edit-profile/${user._id}`}> Edit My Profile </Link> </li>
+            { (user.role == "admin") && <li> <Link to="/booking-list"> Booking List </Link> </li> }
+            { (user.role == "owner") && <li> <Link to="/owner-bookings"> Owner Bookings </Link> </li> }
+            { (user.role == "user") && <li> <Link to="/user-bookings"> User Bookings </Link> </li> }
+            { (user.role == "user") && <li> <Link to="/room-bookings/:pgId"> Room Bookings </Link> </li> }
             <li> <Link to="/" onClick={() => {
               handleLogout();
               dispatch(resetPg());
+              dispatch(resetUser());
             }}> Logout </Link> </li>
           </>
         ) }
@@ -71,7 +83,13 @@ export default function App() {
         <Route path="/pg-list" element={<PgList />} />
         <Route path="/pg-details/:id" element={<PGDetails />} />
         <Route path="/pg-form" element={<PgForm />} />
+        <Route path="/pg-form/:id" element={<PgForm />} />
         <Route path="/public-pg/:id" element={<PublicPg />} />
+        <Route path="/edit-profile/:id" element={<EditProfile />} />
+        <Route path="/booking-list" element={<BookingList />} />
+        <Route path="/owner-bookings" element={<OwnerBookings />} />
+        <Route path="/user-bookings" element={<UserBookings />} />
+        <Route path="/room-bookings/:pgId" element={<RoomBooking />} />
       </Routes>
 
     </div>

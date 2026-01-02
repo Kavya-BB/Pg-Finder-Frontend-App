@@ -75,7 +75,9 @@ export default function OwnerDashboard() {
                     <h3> View Bookings for PG </h3>
                     <h2> {  } </h2>
                     <p> View all bookings for my PGs </p>
-                    <button style={btnStyle}> View Bookings </button>
+                    <Link to="/owner-bookings">
+                        <button style={btnStyle}> View Bookings </button>
+                    </Link>
                 </div>
 
                 <div style={cardStyle}>
