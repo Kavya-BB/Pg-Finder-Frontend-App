@@ -1,11 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
-import { fetchPgById, updatePg, createPg } from "../slices/pg-slice";
+import { createPg } from "../slices/pg-slice";
 
 export default function PgForm() {
-  const { id } = useParams();
-  const isEdit = Boolean(id);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

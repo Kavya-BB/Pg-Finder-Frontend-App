@@ -54,7 +54,9 @@ export default function AdminDashboard() {
                 <div style={cardStyle}>
                     <b> Total Ratings </b>
                     <p> View all Ratings for PGs </p>
-                    <button style={btnStyle}> View Ratings </button>
+                    <Link to="/admin-ratings">
+                        <button style={btnStyle}> View Ratings </button>
+                    </Link>
                 </div>
 
                 <div style={cardStyle}>

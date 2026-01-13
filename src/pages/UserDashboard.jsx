@@ -38,7 +38,9 @@ export default function UserDashboard() {
                     <h3> View Ratings </h3>
                     <h2> ⭐ </h2>
                     <p> Ratings you have given </p>
-                    <button style={btnStyle}> My Ratings </button>
+                    <Link to="/my-ratings">
+                        <button style={btnStyle}> My Ratings </button>
+                    </Link>
                 </div> 
 
                 <div style={cardStyle}>

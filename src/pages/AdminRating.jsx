@@ -1,15 +1,13 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPgRatings, clearRatingStatus } from "../slices/rating-slice";
-import UserContext from "../context/UserContext";
+import { Link } from "react-router-dom";
 
-export default function RatingsList() {
+export default function AdminRating() {
     const dispatch = useDispatch();
-    const { user } = useContext(UserContext);
-
     const [pgId, setPgId] = useState("");
-    const { data, loading } = useSelector(state => state.rating);
+
+    const { data: ratings, loading } = useSelector(state => state.rating);
     const pgData = useSelector(state => state.pg.data);
 
     useEffect(() => {
@@ -22,11 +20,9 @@ export default function RatingsList() {
         }
     };
 
-    const myRatings = data.filter(r => r.userId?._id === user._id);
-
     return (
         <div style={{ padding: "20px" }}>
-            <h1> My Ratings </h1>
+            <h1> Admin – PG Ratings </h1>
 
             <select value={pgId} onChange={(e) => setPgId(e.target.value)}>
                 <option value=""> Select PG </option>
@@ -38,23 +34,23 @@ export default function RatingsList() {
             </select>
 
             <button onClick={handleFetch} style={{ marginLeft: "10px" }}>
-                View Rating
+                View Ratings
             </button>
 
             <br /><br />
 
-            {loading && <p>Loading...</p>}
+            {loading && <p>Loading ratings...</p>}
 
-            {!loading && pgId && myRatings.length === 0 && (
-                <p>No rating given by you for this PG</p>
+            {!loading && pgId && ratings.length === 0 && (
+                <p>No ratings for this PG</p>
             )}
 
-            {myRatings.map(r => (
+            {ratings.map(r => (
                 <div
                     key={r._id}
                     style={{
-                        border: "1px solid #ddd",
-                        padding: "10px",
+                        border: "1px solid #ccc",
+                        padding: "12px",
                         marginBottom: "10px",
                         borderRadius: "6px"
                     }}
@@ -65,9 +61,13 @@ export default function RatingsList() {
 
                     {r.comments && (
                         <p>
-                            <b>Your Comment:</b> {r.comments}
+                            <b>Comment:</b> {r.comments}
                         </p>
                     )}
+
+                    <p style={{ fontSize: "14px", color: "#555" }}>
+                        <b>User:</b> {r.userId?.name} ({r.userId?.email})
+                    </p>
                 </div>
             ))}
 

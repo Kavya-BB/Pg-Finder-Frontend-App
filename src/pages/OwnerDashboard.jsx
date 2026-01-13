@@ -1,10 +1,18 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { fetchOwnerBookings } from '../slices/booking-slice';
 
 export default function OwnerDashboard() {
+    const dispatch = useDispatch();
     const { data, loading, errors} = useSelector((state) => {
         return state.pg;
     });
+    const { data: bookingData } = useSelector(state => state.booking);
+
+    useEffect(() => {
+        dispatch(fetchOwnerBookings());
+    }, [dispatch])
 
     if(loading) {
         return <p> loading... </p>
@@ -18,6 +26,8 @@ export default function OwnerDashboard() {
     const approvedPgs = data.filter(pg => pg.isApproved).length;
     const pendingPgs = data.filter(pg => !pg.isApproved).length;
     const verifiedPgs = data.filter(pg => pg.isVerified).length;
+    const totalBookings = bookingData.length;
+    const totalRatings = data.reduce((sum, pg) => sum + (pg.ratingCount || 0), 0);
 
     return (
         <div style={{ padding: "20px" }}>
@@ -73,10 +83,19 @@ export default function OwnerDashboard() {
 
                 <div style={cardStyle}>
                     <h3> View Bookings for PG </h3>
-                    <h2> {  } </h2>
+                    <h2> { totalBookings } </h2>
                     <p> View all bookings for my PGs </p>
                     <Link to="/owner-bookings">
                         <button style={btnStyle}> View Bookings </button>
+                    </Link>
+                </div>
+
+                <div style={cardStyle}>
+                    <h3> View Ratings for PG </h3>
+                    <h2> { totalRatings } </h2>
+                    <p> View all Ratings for my PGs </p>
+                    <Link to="/owner-ratings">
+                        <button style={btnStyle}> View Ratings </button>
                     </Link>
                 </div>
 

@@ -95,7 +95,7 @@ export default function PGDetails() {
 
             <p>
                 <strong>
-                    <button onClick={() => navigate(`/pg-form/${selectedPg._id}`)}>
+                    <button onClick={() => navigate(`/edit-pg`)}>
                         Edit PG
                     </button>
                 </strong>

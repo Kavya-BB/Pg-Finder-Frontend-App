@@ -2,11 +2,12 @@ import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPublicPgData } from "../slices/pg-slice";
+import { fetchPgRatings, clearRatingStatus } from "../slices/rating-slice";
 
 export default function PublicPg() {
     const { id } = useParams();
     const dispatch = useDispatch();
-
+    
     const { data, loading, errors } = useSelector((state) => {
         return state.pg;
     });
@@ -16,6 +17,11 @@ export default function PublicPg() {
             dispatch(fetchPublicPgData())
         }
     }, [dispatch, data.length]);
+
+    useEffect(() => {
+        dispatch(clearRatingStatus());
+        dispatch(fetchPgRatings(id));
+    }, [dispatch, id])
 
     const pg = data.find(pg => pg._id === id);
 
@@ -33,7 +39,8 @@ export default function PublicPg() {
 
     return (
         <div style={{ padding: "20px" }}>
-            <h1> { pg.name } </h1>
+
+            <h1> { pg?.pgname } </h1>
 
             <p> <strong> Location:</strong> { pg.location?.address } </p>
 
@@ -50,7 +57,20 @@ export default function PublicPg() {
 
             <p> <strong> Description:</strong> { pg.description } </p>
 
-            <p> <strong> Rating: </strong> ⭐{ pg.rating } </p>
+            <div>
+                {[1,2,3,4,5].map(star => (
+                    <span
+                        key={star}
+                        style={{
+                            color: star <= Math.round(pg.rating) ? "#ffc107" : "#ccc",
+                            fontSize: "22px"
+                        }}
+                    >
+                        ★
+                    </span>
+                ))}
+                <span> ({ pg.rating })</span>
+            </div>
 
             { pg.pgPhotos?.length === 0 && <p> No photos available </p> }
 
@@ -65,8 +85,14 @@ export default function PublicPg() {
             <br /> <br />
 
             <div>
-                <Link to={`/room-bookings/${pg._id}`}>
+                <Link to={`/room-bookings/${pg._id}`} state={{ pg }}>
                     <button>Book Now</button>
+                </Link>
+            </div>
+
+            <div>
+                <Link to={`/pg-ratings/${pg._id}`}>
+                    <button>Rate this PG</button>
                 </Link>
             </div>
 

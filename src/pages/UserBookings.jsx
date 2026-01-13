@@ -26,27 +26,54 @@ export default function UserBookings() {
             <h1> User Bookings List </h1>
 
             {data.length === 0 ? (
-                <p>No bookings</p>
-                    ) : (
+                <p>No bookings found</p>
+                ) : (
                     data.map(ele => (
-                        <div key={ele._id} style={{ marginBottom: "10px" }}>
+                        <div
+                            key={ele._id}
+                            style={{
+                                marginBottom: "15px",
+                                padding: "10px",
+                                border: "1px solid #ccc",
+                                borderRadius: "5px"
+                            }}
+                        >
                             <p>
                                 <strong>
-                                {ele.pgId?.pgname} - {ele.pgId?.location?.address || "N/A"}
+                                    {ele.pgId?.pgname}
                                 </strong>
                             </p>
 
-                            <p>Status: {ele.status}</p>
+                            <p>
+                                Location: {ele.pgId?.location?.address || "N/A"}
+                            </p>
+
+                            <p>
+                                Room: {ele.roomType}
+                            </p>
+
+                            <p>
+                                Duration: {ele.duration} {ele.durationType}
+                            </p>
+
+                            <p>
+                                Status: <b>{ele.status}</b>
+                            </p>
 
                             <button
-                                disabled={ele.status === "cancelled"}
-                                onClick={() => dispatch(cancelBooking(ele._id))}
+                                disabled={ele.status !== "pending"}
+                                onClick={() => 
+                                    dispatch(cancelBooking(ele._id))
+                                        .unwrap()
+                                        .then(() => alert("Booking cancelled"))
+                                        .catch(() => alert("Cancel failed"))
+                                }
                             >
-                                Cancel
+                                {ele.status === "cancelled" ? "Cancelled" : "Cancel Booking"}
                             </button>
-                        </div>
-                    ))
-                )}
+                    </div>
+                ))
+            )}
 
             <br />
 

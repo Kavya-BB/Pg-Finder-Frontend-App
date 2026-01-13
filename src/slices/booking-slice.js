@@ -46,17 +46,17 @@ export const createBooking = createAsyncThunk("booking/createBooking", async (fo
 
 export const confirmBooking  = createAsyncThunk("booking/confirmBooking", async (bookingId, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`/confirm/${id}`, {}, { headers: { Authorization: localStorage.getItem("token") }});
+        const response = await axios.put(`/confirm/${bookingId}`, {}, { headers: { Authorization: localStorage.getItem("token") }});
         return response.data.booking;
     } catch(err) {
         console.log(err);
-        return rejectWithValue(er4.response.data);
+        return rejectWithValue(err.response.data);
     }
 });
 
 export const cancelBooking = createAsyncThunk("booking/cancelBooking", async (bookingId, { rejectWithValue }) => {
     try{
-        const response = await axios.put(`/cancel/${id}`, {}, {headers: { Authorization: localStorage.getItem("token") }});
+        const response = await axios.put(`/cancel/${bookingId}`, {}, {headers: { Authorization: localStorage.getItem("token") }});
         return response.data.booking;
     } catch(err) {
         console.log(err);
@@ -132,8 +132,11 @@ const bookingSlice = createSlice({
             .addCase(confirmBooking.fulfilled, (state, action) => {
                 state.loading = false;
                 state.errors = null;
-                const index = state.data.findIndex(ele => ele._id === action.payload._id);
-                if(index !== -1) state.data[index] = action.payload;
+                state.data = state.data.map(booking => 
+                    booking._id === action.payload._id 
+                        ? action.payload 
+                        : booking
+                );
             })
             .addCase(confirmBooking.rejected, (state, action) => {
                 state.loading = false;
@@ -146,8 +149,11 @@ const bookingSlice = createSlice({
             .addCase(cancelBooking.fulfilled, (state, action) => {
                 state.loading = false;
                 state.errors = null;
-                const index = state.data.findIndex(ele => ele._id === action.payload._id);
-                if(index !== -1) state.data[index] = action.payload;
+                state.data = state.data.map(booking => 
+                    booking._id === action.payload._id 
+                        ? action.payload 
+                        : booking
+                );
             })
             .addCase(cancelBooking.rejected, (state, action) => {
                 state.loading = false;
