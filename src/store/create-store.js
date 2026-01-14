@@ -3,6 +3,7 @@ import pgReducer from "../slices/pg-slice";
 import userReducer from "../slices/user-slice";
 import bookingReducer from "../slices/booking-slice";
 import ratingReducer from "../slices/rating-slice";
+import paymentReducer from "../slices/payment-slice";
 
 const createStore = () => {
     return configureStore({
@@ -10,7 +11,8 @@ const createStore = () => {
             pg: pgReducer,
             user: userReducer,
             booking: bookingReducer,
-            rating: ratingReducer
+            rating: ratingReducer,
+            payment: paymentReducer
         }
     });
 }

@@ -24,6 +24,7 @@ import RatingForm from "./pages/RatingForm";
 import RatingsList from "./pages/RatingsList";
 import OwnerRating from "./pages/OwnerRating";
 import AdminRating from "./pages/AdminRating";
+import PaymentSuccess from "./pages/PaymentSuccess";
 import { resetPg } from "./slices/pg-slice";
 import { resetUser } from "./slices/user-slice";
 import { fetchPgData, fetchPublicPgData } from "./slices/pg-slice";
@@ -67,6 +68,7 @@ export default function App() {
             { (user.role == "user") && <li> <Link to="/my-ratings"> Ratings List </Link> </li> }
             { (user.role == "owner") && <li> <Link to="/owner-ratings"> Owner Ratings </Link> </li> }
             { (user.role == "admin") && <li> <Link to="/admin-ratings"> Admin Ratings </Link> </li> }
+            <li> <Link to="/payment-success"> Payment Success </Link> </li>
             <li> <Link to="/" onClick={() => {
               handleLogout();
               dispatch(resetPg());
@@ -105,6 +107,7 @@ export default function App() {
         <Route path="/my-ratings" element={<RatingsList />} />
         <Route path="/owner-ratings" element={<OwnerRating />} />
         <Route path="/admin-ratings" element={<AdminRating />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
       </Routes>
 
     </div>

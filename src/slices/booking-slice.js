@@ -34,15 +34,15 @@ export const fetchUserBookings  = createAsyncThunk("booking/fetchUserBookings", 
     }
 });
 
-export const createBooking = createAsyncThunk("booking/createBooking", async (formData, { rejectWithValue }) => {
-    try {
-        const response = await axios.post('/create/booking', formData, { headers: { Authorization: localStorage.getItem("token") }});
-        return response.data.booking;
-    } catch(err) {
-        console.log(err);
-        return rejectWithValue(err.response.data);
+export const createBooking = createAsyncThunk("booking/createBooking", async (bookingData, { rejectWithValue }) => {
+        try {
+            const response = await axios.post("/create/booking", bookingData, { headers: { Authorization: localStorage.getItem("token") }});
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data);
+        }
     }
-});
+);
 
 export const confirmBooking  = createAsyncThunk("booking/confirmBooking", async (bookingId, { rejectWithValue }) => {
     try {
@@ -119,7 +119,7 @@ const bookingSlice = createSlice({
             .addCase(createBooking.fulfilled, (state, action) => {
                 state.loading = false;
                 state.errors = null;
-                state.data.unshift(action.payload);
+                state.data.unshift(action.payload.booking);
             })
             .addCase(createBooking.rejected, (state, action) => {
                 state.loading = false;
