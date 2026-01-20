@@ -95,6 +95,18 @@ export const deletePg = createAsyncThunk("pg/deletePg", async (id, { rejectWithV
     }
 });
 
+export const nearByPgs = createAsyncThunk("pg/nearByPgs", async ({ latitude, longitude, radius = 100 }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/pgs/nearby?latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
+        { headers: { Authorization: localStorage.getItem("token") } }
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
 
 const pgSlice = createSlice({
     name: 'pg',
@@ -102,12 +114,14 @@ const pgSlice = createSlice({
         data: [],
         selectedPg: null,
         errors: null,
+        nearby: [],
         loading: false
     },
     reducers: {
         resetPg: (state) => {
             state.data = [];
             state.selectedPg = null;
+            state.nearby = [];
             state.errors = null;
             state.loading = false;
         }
@@ -140,16 +154,16 @@ const pgSlice = createSlice({
                 state.loading = false;
                 state.errors = action.payload;
             })
+            .addCase(updatePg.pending, (state) => {
+                state.loading = true;
+                state.errors = null;
+            })
             .addCase(updatePg.fulfilled, (state, action) => {
                 state.loading = false;
                 const updatedPg = action.payload;
                 const index = state.data.findIndex(pg => pg._id === updatedPg._id);
                 if (index !== -1) state.data[index] = updatedPg;
                 if (state.selectedPg?._id === updatedPg._id) state.selectedPg = updatedPg;
-                state.errors = null;
-            })
-            .addCase(updatePg.pending, (state) => {
-                state.loading = true;
                 state.errors = null;
             })
             .addCase(updatePg.rejected, (state, action) => {
@@ -241,7 +255,19 @@ const pgSlice = createSlice({
             .addCase(deletePg.rejected, (state, action) => {
                 state.loading = false;
                 state.errors = action.payload;
-            });
+            })
+            .addCase(nearByPgs.pending, (state) => {
+            state.loading = true;
+            state.errors = null;
+            })
+            .addCase(nearByPgs.fulfilled, (state, action) => {
+            state.loading = false;
+            state.nearby = action.payload;
+            })
+            .addCase(nearByPgs.rejected, (state, action) => {
+            state.loading = false;
+            state.errors = action.payload;
+            })
     }
 });
 

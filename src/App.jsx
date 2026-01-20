@@ -25,6 +25,7 @@ import RatingsList from "./pages/RatingsList";
 import OwnerRating from "./pages/OwnerRating";
 import AdminRating from "./pages/AdminRating";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import NearByPgs from "./pages/NearByPgs";
 import { resetPg } from "./slices/pg-slice";
 import { resetUser } from "./slices/user-slice";
 import { fetchPgData, fetchPublicPgData } from "./slices/pg-slice";
@@ -69,6 +70,7 @@ export default function App() {
             { (user.role == "owner") && <li> <Link to="/owner-ratings"> Owner Ratings </Link> </li> }
             { (user.role == "admin") && <li> <Link to="/admin-ratings"> Admin Ratings </Link> </li> }
             <li> <Link to="/payment-success"> Payment Success </Link> </li>
+            <li> <Link to="/nearby">NearBy Location</Link> </li>
             <li> <Link to="/" onClick={() => {
               handleLogout();
               dispatch(resetPg());
@@ -108,6 +110,7 @@ export default function App() {
         <Route path="/owner-ratings" element={<OwnerRating />} />
         <Route path="/admin-ratings" element={<AdminRating />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/nearby" element={<NearByPgs />} />
       </Routes>
 
     </div>
