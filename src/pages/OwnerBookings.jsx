@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOwnerBookings, confirmBooking, cancelBooking } from "../slices/booking-slice";
+import "../styles/owner-bookings.css";
 
 export default function OwnerBookings() {
     const dispatch = useDispatch();
@@ -37,72 +38,105 @@ export default function OwnerBookings() {
     }
 
     return (
-    <div>
-        <h1> My PG Bookings </h1>
+        <div className="page">
+            <div className="owner-bookings-card">
 
-        { data.length === 0 ? (
-            <p> No bookings found </p>
-            ) : (
-                <table border="1" cellPadding="10">
-                    <thead>
-                        <tr>
+                <div className="owner-bookings-header">
+                    <h1>My PG Bookings</h1>
+                    <p>Manage and respond to booking requests</p>
+                </div>
+
+                {data.length === 0 ? (
+                    <div className="empty-state">
+                        <p>No bookings found</p>
+                    </div>
+                ) : (
+                <div className="table-wrapper">
+                    <table className="booking-table">
+                        <thead>
+                            <tr>
                             <th>User</th>
-                            <th>Email</th>
                             <th>PG</th>
-                            <th>Location</th>
                             <th>Room</th>
                             <th>Duration</th>
                             <th>Amount</th>
                             <th>Status</th>
                             <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map(ele => (
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map(ele => (
                             <tr key={ele._id}>
-                                <td>{ele.userId?.name}</td>
-                                <td>{ele.userId?.email}</td>
-                                <td>{ele.pgId?.pgname}</td>
-                                <td>{ele.pgId?.location?.address || "N/A"}</td>
-                                <td>{ele.roomType}</td>
-                                <td>{ele.duration} {ele.durationType}</td>
-                                <td>₹{ele.amount}</td>
-                                <td>{ele.status}</td>
                                 <td>
+                                    <strong>{ele.userId?.name}</strong>
+                                    <div className="muted">{ele.userId?.email}</div>
+                                </td>
+
+                                <td>
+                                    <strong>{ele.pgId?.pgname}</strong>
+                                    <div className="muted">
+                                        {ele.pgId?.location?.address || "N/A"}
+                                    </div>
+                                </td>
+
+                                <td>{ele.roomType}</td>
+
+                                <td>
+                                    {ele.duration} {ele.durationType}
+                                </td>
+
+                                <td className="amount">₹{ele.amount}</td>
+
+                                <td>
+                                    <span className={`status ${ele.status}`}>
+                                        {ele.status}
+                                    </span>
+                                </td>
+
+                                <td className="actions">
                                     {ele.status === "pending" && (
                                         <>
-                                            <button onClick={() => handleConfirm(ele._id)}>Confirm</button>
-                                            <button
-                                                style={{ marginLeft: "5px", color: "red" }}
-                                                onClick={() => handleCancel(ele._id)}
-                                            >
-                                                Cancel
-                                            </button>
-                                        </>
-                                    )}
-                                    {ele.status === "confirmed" && (
                                         <button
-                                            style={{ color: "red" }}
+                                            className="btn btn-success small"
+                                            onClick={() => handleConfirm(ele._id)}
+                                        >
+                                            Confirm
+                                        </button>
+                                        <button
+                                            className="btn btn-danger small"
                                             onClick={() => handleCancel(ele._id)}
                                         >
                                             Cancel
                                         </button>
+                                        </>
                                     )}
+
+                                    {ele.status === "confirmed" && (
+                                        <button
+                                        className="btn btn-danger small"
+                                        onClick={() => handleCancel(ele._id)}
+                                        >
+                                        Cancel
+                                        </button>
+                                    )}
+
                                     {ele.status === "cancelled" && (
-                                        <span style={{ color: "gray" }}>Cancelled</span>
+                                        <span className="muted">—</span>
                                     )}
                                 </td>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                )}
 
-            <br />
-
-            <Link to="/dashboard">
-                <button> Back to Dashboard </button>
-            </Link>
+                <div className="footer-actions">
+                    <Link to="/dashboard">
+                        <button className="btn btn-outline">Back to Dashboard</button>
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 }

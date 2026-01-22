@@ -1,0 +1,92 @@
+.admin-page {
+  padding: 30px;
+  background: linear-gradient(135deg, #f8fafc, #eef2ff);
+  min-height: 100vh;
+}
+
+.admin-header h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
+.admin-header p {
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+.admin-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.admin-card {
+  background: white;
+  padding: 22px;
+  border-radius: 16px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.admin-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 40px rgba(0,0,0,0.12);
+}
+
+.admin-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+}
+
+.admin-card p {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn.primary {
+  background: #4f46e5;
+  color: white;
+}
+
+.btn.secondary {
+  background: #10b981;
+  color: white;
+}
+
+.btn.outline {
+  background: transparent;
+  border: 2px solid #4f46e5;
+  color: #4f46e5;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.highlight {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+}
+
+.highlight p {
+  color: #e0e7ff;
+}
+
+.highlight .btn {
+  background: white;
+  color: #4f46e5;
+}

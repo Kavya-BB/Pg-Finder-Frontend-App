@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { createRating, fetchPgRatings } from "../slices/rating-slice";
 import { fetchPublicPgData } from "../slices/pg-slice";
+import "../styles/RatingForm.css";
 
 export default function RatingForm() {
     const { pgId } = useParams();
@@ -36,55 +37,57 @@ export default function RatingForm() {
     };
 
     return (
-        <div>
-            <h1> Rate this PG </h1>
+        <div className="rating-page">
+            <div className="rating-card">
+                <h1> Rate this PG </h1>
 
-            { successMsg && <p style={{ color: "green" }}> { successMsg } </p> }
-            { errors && <p style={{ color: "red" }}> { errors.error}  </p> }
+                { successMsg && <p className="success"> { successMsg } </p> }
+                { errors && <p className="error"> { errors.error}  </p> }
 
-            <form onSubmit={handleSubmit}>
-                <label> Rating (1-5) </label>
-                <div style={{ fontSize: "30px", margin: "10px 0" }}>
-                    {[1, 2, 3, 4, 5].map((star) => (
-                        <span
-                            key={star}
-                            onClick={() =>
-                                setFormData({ ...formData, roomRating: star })
-                            }
-                            style={{
-                                cursor: "pointer",
-                                color: star <= formData.roomRating ? "#ffc107" : "#ccc",
-                                marginRight: "6px"
-                            }}
+                <form onSubmit={handleSubmit}>
+                    <label className="label"> Your Rating </label>
+
+                    <div className="stars">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <span
+                                key={star}
+                                className={star <= formData.roomRating ? "star active" : "star"}
+                                onClick={() =>
+                                    setFormData({ ...formData, roomRating: star })
+                                }
+                            >
+                                ★
+                            </span>
+                        ))}
+                    </div>
+
+                    <br />
+
+                    <textarea
+                        placeholder="Write a comment (optional)"
+                        value={formData.comments}
+                        onChange={(e) => 
+                            setFormData({ ...formData, comments: e.target.value })
+                        } 
+                    />
+
+                    <br />
+
+                    <div className="btn-group">
+                        <button className="submit-btn" disabled={loading}>
+                            { loading ? "Submitting..." : "Submit Rating" }
+                        </button>
+
+                        <button
+                            type="button"
+                            className="back-btn"
+                            onClick={() => navigate(`/public-pg/${pgId}`)}
                         >
-                            ★
-                        </span>
-                    ))}
-                </div>
-
-
-                <br /> <br />
-
-                <textarea
-                    placeholder="Write a comment (optional)"
-                    value={formData.comments}
-                    onChange={(e) => 
-                        setFormData({ ...formData, comments: e.target.value })
-                    } 
-                />
-
-                <br /> <br />
-
-                <button disabled={loading}>
-                    { loading ? "Submitting..." : "Submit Rating" }
-                </button>
-                
-                <div>
-                    <Link to={`/public-pg/${pgId}`}>
-                        <button> Back to pg </button>
-                    </Link>
-                </div>
-            </form>
+                            Back to PG
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     )
 }

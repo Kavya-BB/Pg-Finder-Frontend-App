@@ -46,28 +46,20 @@ export default function AdminRating() {
             )}
 
             {ratings.map(r => (
-                <div
-                    key={r._id}
-                    style={{
-                        border: "1px solid #ccc",
-                        padding: "12px",
-                        marginBottom: "10px",
-                        borderRadius: "6px"
-                    }}
-                >
-                    <p>
-                        ⭐ <b>{r.roomRating}</b> / 5
-                    </p>
+                <div className="rating-card" key={r._id}>
+                    <div className="rating-header">
+                        <span className="stars">⭐ {r.roomRating} / 5</span>
+                        <span className="pg-name">{r.pgId?.pgname}</span>
+                    </div>
 
                     {r.comments && (
-                        <p>
-                            <b>Comment:</b> {r.comments}
-                        </p>
+                        <p className="rating-comment">“{r.comments}”</p>
                     )}
 
-                    <p style={{ fontSize: "14px", color: "#555" }}>
-                        <b>User:</b> {r.userId?.name} ({r.userId?.email})
-                    </p>
+                    <div className="rating-user">
+                        <span>{r.userId?.name}</span>
+                        <span className="email">{r.userId?.email}</span>
+                    </div>
                 </div>
             ))}
 

@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import UserContext from "../context/UserContext";
 import { fetchPgData, fetchPublicPgData, verifyPgCertificate, approvePg, deletePg } from "../slices/pg-slice";
+import "../styles/PgList.css";
 
 export default function PgList() {
     const location = useLocation();
@@ -77,7 +78,7 @@ export default function PgList() {
                 </>
             )}
 
-            <table border="1">
+            <table className="pg-table">
                 <thead>
                     <tr>
                         <th> PG Name </th>
@@ -98,24 +99,36 @@ export default function PgList() {
                             <tr key={ele._id}>
                                 <td> { ele.pgname } </td> 
                                 <td> { ele.location?.address } </td>
-                                { user?.role !== "user" && <td> { ele.isVerified ? "Yes" : "No" } </td> }
-                                { user?.role !== "user" && <td> { ele.isApproved ? "Yes" : "No" } </td> }
+                                { user?.role !== "user" && (
+                                    <td>
+                                        <span className={`badge ${ele.isVerified ? "badge-green" : "badge-red"}`}>
+                                            {ele.isVerified ? "Verified" : "Not Verified"}
+                                        </span>
+                                    </td>
+                                ) }
+                                { user?.role !== "user" && (
+                                    <td>
+                                        <span className={`badge ${ele.isApproved ? "badge-green" : "badge-red"}`}>
+                                            {ele.isApproved ? "Approved" : "Not Approved"}
+                                        </span>
+                                    </td>
+                                ) }
 
                                 { user?.role == "admin" && (
                                     <td>
-                                        <button onClick={() => handleVerify(ele)}> { ele.isVerified ? "Unverify" : "Verify" } </button>
+                                        <button className="btn-sm btn-primary" onClick={() => handleVerify(ele)}> { ele.isVerified ? "Unverify" : "Verify" } </button>
                                     </td>
                                 )}
 
                                 { user?.role == "admin" && (
                                     <td>
-                                        <button disabled={!ele.isVerified} onClick={() => handleApprove(ele)}> { ele.isApproved ? "Reject" : "Approve" } </button>
+                                        <button className="btn-sm btn-primary" disabled={!ele.isVerified} onClick={() => handleApprove(ele)}> { ele.isApproved ? "Reject" : "Approve" } </button>
                                     </td>
                                 )}
 
                                { user?.role == "admin" && (
                                 <td>
-                                    <button onClick={() => handleDelete(ele._id)}> Delete PG </button>
+                                    <button className="btn-sm btn-danger" onClick={() => handleDelete(ele._id)}> Delete PG </button>
                                 </td>
                                )}                                
 

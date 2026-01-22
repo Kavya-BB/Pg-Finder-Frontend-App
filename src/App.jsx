@@ -56,7 +56,7 @@ export default function App() {
             <li> <Link to="/account"> Account </Link> </li>
             { (user.role == "admin" || user.role == "owner") && <li> <Link to="/users-list"> List Users </Link> </li> }
             <li> <Link to="/pg-list"> Pg Lists </Link> </li>
-            <li> <Link to="/pg-details/:id"> Pg Details </Link> </li>
+            {(user.role != "user") && <li> <Link to="/pg-details/:id"> Pg Details </Link> </li>}
             { (user.role == "owner") && <li> <Link to="/pg-form"> Add PG </Link> </li> }
             { (user.role == "owner") && <li> <Link to="/edit-pg"> Edit PG </Link> </li> }
             { (user.role == "user") && <li> <Link to="/public-pg/:id"> Public PG Page </Link> </li> }
@@ -70,7 +70,7 @@ export default function App() {
             { (user.role == "owner") && <li> <Link to="/owner-ratings"> Owner Ratings </Link> </li> }
             { (user.role == "admin") && <li> <Link to="/admin-ratings"> Admin Ratings </Link> </li> }
             <li> <Link to="/payment-success"> Payment Success </Link> </li>
-            <li> <Link to="/nearby">NearBy Location</Link> </li>
+            { (user.role == "user") && <li> <Link to="/nearby">NearBy Location</Link> </li>}
             <li> <Link to="/" onClick={() => {
               handleLogout();
               dispatch(resetPg());

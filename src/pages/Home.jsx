@@ -1,7 +1,11 @@
 export default function Home() {
     return (
         <div>
-            <h1> Home page </h1>
+            <section className="hero">
+                <h1>Find the Best PG Near You</h1>
+                <p>Verified PGs · Affordable · Near You</p>
+            </section>
         </div>
     )
 }
+

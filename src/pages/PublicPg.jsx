@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPublicPgData } from "../slices/pg-slice";
 import { fetchPgRatings, clearRatingStatus } from "../slices/rating-slice";
+import "../styles/PublicPg.css"
 
 export default function PublicPg() {
     const { id } = useParams();
@@ -38,7 +39,7 @@ export default function PublicPg() {
     }
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div className="pg-card">
 
             <h1> { pg?.pgname } </h1>
 
@@ -82,18 +83,20 @@ export default function PublicPg() {
                 />
             )}
 
-            <br /> <br />
+            <br />
 
-            <div>
-                <Link to={`/room-bookings/${pg._id}`} state={{ pg }}>
-                    <button>Book Now</button>
-                </Link>
-            </div>
+            <div className="pg-actions">
+                <div>
+                    <Link to={`/room-bookings/${pg._id}`} state={{ pg }}>
+                        <button>Book Now</button>
+                    </Link>
+                </div>
 
-            <div>
-                <Link to={`/pg-ratings/${pg._id}`}>
-                    <button>Rate this PG</button>
-                </Link>
+                <div>
+                    <Link to={`/pg-ratings/${pg._id}`}>
+                        <button>Rate this PG</button>
+                    </Link>
+                </div>
             </div>
 
             <div>

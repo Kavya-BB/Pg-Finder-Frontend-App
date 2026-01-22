@@ -47,33 +47,44 @@ const NearByPgs = () => {
   };
 
   return (
-    <>
-      <h2>Nearby PGs</h2>
+    <div>
+      <>
+        <h2>Nearby PGs</h2>
 
-      <input
-        type="range"
-        min="1"
-        max="20"
-        value={radius}
-        onChange={(e) => setRadius(Number(e.target.value))}
-      />
-      <span> {radius} km </span>
-
-      <button onClick={handleSearchArea}>
-        Search this area
-      </button>
-
-      { loading && <p> Loading nearby PGs... </p> }
-
-      {userLocation && (
-        <NearbyPgMap
-          pgs={pgs}
-          userLocation={userLocation}
-          radius={radius}
-          mapCenter={mapCenter}
+        <input
+          type="range"
+          min="1"
+          max="20"
+          value={radius}
+          onChange={(e) => setRadius(Number(e.target.value))}
         />
-      )}
-    </>
+        <span> {radius} km </span>
+
+        <button onClick={handleSearchArea}>
+          Search this area
+        </button>
+
+        { loading && <p> Loading nearby PGs... </p> }
+
+        {userLocation && (
+          <NearbyPgMap
+            pgs={pgs}
+            userLocation={userLocation}
+            radius={radius}
+            mapCenter={mapCenter}
+          />
+        )}
+      </>
+
+      <div className="grid">
+        <div className="list">
+          {pgs.map(pg => (
+            <div className="card" key={pg._id}>{pg.name}</div>
+          ))}
+        </div>
+        <NearbyPgMap />
+      </div>
+    </div>    
   );
 };
 

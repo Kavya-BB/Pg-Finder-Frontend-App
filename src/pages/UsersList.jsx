@@ -3,6 +3,7 @@ import axios from "../config/axios";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
 import { Link, useLocation } from "react-router-dom";
+import "../styles/UserList.css";
 
 export default function UsersList() {
     const { user } = useContext(UserContext);
@@ -75,41 +76,57 @@ export default function UsersList() {
     }
 
     return (
-        <div>
+        <div className="user-page">
             <h1> Users List </h1>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th> name </th>
-                        <th> email </th>
-                        <th> role </th>
-                        { user?.role == "admin" && <th> Action1 </th> }
-                        { user?.role == "admin" && <th> Action2 </th> }
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        filteredUsers.map((ele) => {
-                            return (
-                                <tr key={ele._id}>
-                                    <td> {ele.name} </td>
-                                    <td> {ele.email} </td>
-                                    <td> {ele.role} </td>
+            <div className="table-card">
+                <table className="user-table">
+                    <thead>
+                        <tr>
+                            <th> Name </th>
+                            <th> Email </th>
+                            <th> Role </th>
+                            { user?.role == "admin" && <th> Actions </th> }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            filteredUsers.map((ele) => {
+                                return (
+                                    <tr key={ele._id}>
+                                        <td> {ele.name} </td>
+                                        <td> {ele.email} </td>
+                                        <td>
+                                            <span className={`role-badge ${ele.role}`}>
+                                            {ele.role}
+                                            </span>
+                                        </td>
 
-                                    { user?.role == "admin" && <td> {user?._id !== ele._id && <button onClick={() => {
-                                        handleRemove(ele._id, ele.email)
-                                    }}> remove </button>} </td> }
+                                        { user?.role == "admin" && (
+                                            <td className="action-cell"> 
+                                                {user?._id !== ele._id && (
+                                                    <>
+                                                        <button 
+                                                            className="edit-btn"
+                                                            onClick={() => handleEdit(ele._id)}
+                                                        >
+                                                            Edit
+                                                        </button>
 
-                                    { user?.role == "admin" && <td> {user?._id !== ele._id && <button onClick={() => {
-                                        handleEdit(ele._id)
-                                    }}> edit </button>} </td> }
-                                    
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </table>
+                                                        <button
+                                                            onClick={() => handleRemove(ele._id, ele.email)}
+                                                        > 
+                                                            remove 
+                                                        </button>
+                                                    </>
+                                                )}
+                                            </td>  
+                                        )}                                      
+                                    </tr>
+                                )})
+                        }
+                    </tbody>
+                </table>
+            </div>
 
             <br />
 

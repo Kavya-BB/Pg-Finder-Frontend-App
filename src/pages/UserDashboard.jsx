@@ -4,7 +4,7 @@ export default function UserDashboard() {
 
     return (
         <div style={{ padding: "20px" }}>
-            <h1> User Dashboard Page </h1>
+            <h1> Welcome Back 👋 </h1>
             <b> Find PGs near you and manage your profile </b>
 
             <div style={gridStyle}>

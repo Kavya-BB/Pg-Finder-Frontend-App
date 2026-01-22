@@ -3,6 +3,7 @@ import UserContext from "../context/UserContext";
 import { useDispatch } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { updateUserProfile } from "../slices/user-slice";
+import "../styles/EditProfile.css";
 
 export default function EditProfile() {
     const { id } = useParams();
@@ -42,25 +43,38 @@ export default function EditProfile() {
     };
 
     if(!user) {
-        return <p> loading... </p>
+        return <p className="loading-text"> loading... </p>
     }
 
     return (
-        <div>
-            <h1> Edit My Profile </h1>
+        <div className="edit-profile-page">
+            <div className="edit-profile-card">
+                <h1> Edit My Profile </h1>
+                <p className="subtitle">Update your personal details</p>
 
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter Name" /> <br />
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter Name" /> <br />
+                    </div>
 
-                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email" /> <br />
-                
-                <button type="submit"> Update </button>
-            </form>
+                    <div className="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email" /> <br />
+                    </div>
 
-            <div>
-                <Link to="/account">
-                    <button> Back to Account </button>
-                </Link>
+                    <button type="submit" className="primary-btn"> 
+                        Update 
+                    </button>
+                </form>
+
+                <div>
+                    <Link to="/account">
+                        <button className="secondary-btn">
+                             Back to Account 
+                        </button>
+                    </Link>
+                </div>
             </div>
         </div>
     )

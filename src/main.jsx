@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css'
 import App from './App.jsx'
+import "./styles/theme.css";
 import AuthProvider from './components/AuthProvider.jsx';
 import createStore from './store/create-store.js';
 import { Provider } from 'react-redux';

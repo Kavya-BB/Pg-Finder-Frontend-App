@@ -1,0 +1,49 @@
+.rating-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rating-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+.rating-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stars {
+  font-size: 16px;
+  font-weight: 700;
+  color: #f59e0b;
+}
+
+.pg-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4f46e5;
+}
+
+.rating-comment {
+  margin: 12px 0;
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.rating-user {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.rating-user .email {
+  font-style: italic;
+}

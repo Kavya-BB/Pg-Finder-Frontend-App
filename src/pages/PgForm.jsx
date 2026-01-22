@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import { createPg } from "../slices/pg-slice";
+import "../styles/pg-form.css";
 
 export default function PgForm() {
 
@@ -96,131 +97,150 @@ export default function PgForm() {
   }
 
   return (
-    <div style={{ maxWidth: "800px", margin: "auto" }}>
-      <h1> Add PG </h1>
-      <Formik initialValues={initialValues} validate={validate} onSubmit={handleSubmit} >
-        {({ values, setFieldValue }) => (
-          <Form encType="multipart/form-data">
-            <label> PG Name </label>
-            <Field name="pgname" />
-            <ErrorMessage name="pgname" component="div" />
+    <div className="page">
+      <div className="pg-form-card">
+        <div className="pg-form-header">
+          <h1>Add New PG</h1>
+          <p>Fill accurate details to get faster approval</p>
+        </div>
 
-            <label> Description </label>
-            <Field as="textarea" name="description" />
+        <Formik initialValues={initialValues} validate={validate} onSubmit={handleSubmit}>
+          {({ values, setFieldValue }) => (
+            <Form encType="multipart/form-data" className="pg-form">
 
-            <h3> Location </h3>
-            <Field name="location.address" placeholder="Address" />
-            <ErrorMessage name="location.address" component="div" />
+              <section className="form-section">
+                <h3>🏠 PG Information</h3>
 
-            <Field name="location.coordinates.latitude" placeholder="Latitude" />
-            <Field name="location.coordinates.longitude" placeholder="Longitude" />
+                <label>PG Name</label>
+                <Field name="pgname" placeholder="Ex: Sunrise Men's PG" />
+                <ErrorMessage name="pgname" component="div" className="error" />
 
-            <h3> Room Types </h3>
-            <FieldArray name="roomTypes">
-              {({ push, remove }) => (
-                <>
-                  {values.roomTypes.map((_, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        border: "1px solid #ccc",
-                        padding: "10px",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <Field
-                        name={`roomTypes[${index}].roomType`}
-                        placeholder="Room Type (Single / Double)"
+                <label>Description</label>
+                <Field as="textarea" name="description" placeholder="Describe your PG..." />
+              </section>
+
+              <section className="form-section">
+                <h3>📍 Location</h3>
+
+                <Field name="location.address" placeholder="Full Address" />
+                <ErrorMessage name="location.address" component="div" className="error" />
+
+                <div className="two-col">
+                  <Field name="location.coordinates.latitude" placeholder="Latitude" />
+                  <Field name="location.coordinates.longitude" placeholder="Longitude" />
+                </div>
+              </section>
+
+              <section className="form-section">
+                <h3>🛏 Room Types</h3>
+
+                <FieldArray name="roomTypes">
+                  {({ push, remove }) => (
+                    <>
+                      {values.roomTypes.map((_, index) => (
+                        <div key={index} className="room-card">
+                          <Field
+                            name={`roomTypes[${index}].roomType`}
+                            placeholder="Room Type (Single / Double)"
+                          />
+                          <Field
+                            name={`roomTypes[${index}].count`}
+                            type="number"
+                            placeholder="Rooms"
+                          />
+                          <Field
+                            name={`roomTypes[${index}].rent`}
+                            type="number"
+                            placeholder="Rent (₹)"
+                          />
+
+                          {values.roomTypes.length > 1 && (
+                            <button
+                              type="button"
+                              className="btn btn-danger small"
+                              onClick={() => remove(index)}
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
+                      ))}
+
+                      <button
+                        type="button"
+                        className="btn btn-outline"
+                        onClick={() => push({ roomType: "", count: "", rent: "" })}
+                      >
+                        ➕ Add Another Room Type
+                      </button>
+                    </>
+                  )}
+                </FieldArray>
+              </section>
+
+              <section className="form-section">
+                <h3>✨ Amenities</h3>
+
+                <div className="amenities-grid">
+                  {["wifi", "food", "laundry"].map((amenity) => (
+                    <label key={amenity} className="amenity-chip">
+                      <input
+                        type="checkbox"
+                        checked={values.amenities.includes(amenity)}
+                        onChange={(e) =>
+                          setFieldValue(
+                            "amenities",
+                            e.target.checked
+                              ? [...values.amenities, amenity]
+                              : values.amenities.filter((a) => a !== amenity)
+                          )
+                        }
                       />
-
-                      <Field
-                        name={`roomTypes[${index}].count`}
-                        type="number"
-                        placeholder="Count"
-                      />
-
-                      <Field
-                        name={`roomTypes[${index}].rent`}
-                        type="number"
-                        placeholder="Rent"
-                      />
-
-                      {values.roomTypes.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => remove(index)}
-                          style={{ marginLeft: "10px" }}
-                        >
-                          ❌ Remove
-                        </button>
-                      )}
-                    </div>
+                      {amenity}
+                    </label>
                   ))}
+                </div>
+              </section>
 
-                  <button
-                    type="button"
-                    onClick={() => push({ roomType: "", count: "", rent: "" })}
-                  >
-                    ➕ Add Room Type
-                  </button>
-                </>
-              )}
-            </FieldArray>
-
-            <h3> Amenities </h3>
-            {["wifi", "food", "laundry"].map((amenity) => (
-              <label key={amenity} style={{ display: "block" }}>
+              <section className="form-section">
+                <h3>📷 PG Photos</h3>
                 <input
-                  type="checkbox" 
-                  checked={values.amenities.includes(amenity)} 
-                  onChange={(e) => 
-                    setFieldValue(
-                      "amenities", 
-                      e.target.checked 
-                        ? [...values.amenities, amenity] 
-                        : values.amenities.filter((a) => a !== amenity)
-                    )
-                  } 
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={(e) =>
+                    setFieldValue("pgPhotos", Array.from(e.target.files))
+                  }
                 />
-                { amenity }
-              </label>
-            ))}
 
-            <h3> PG Photos </h3>
-            <input 
-              type="file" 
-              multiple
-              accept="image/*"
-              onChange={(e) =>
-                setFieldValue("pgPhotos", Array.from(e.target.files))
-              }
-            />
+                <h3>📄 PG Certificate</h3>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) =>
+                    setFieldValue("pgCertificate", e.target.files[0])
+                  }
+                />
+                <ErrorMessage name="pgCertificate" component="div" className="error" />
+              </section>
 
-            <h3> PG Certificate </h3>
-            <input 
-              type="file"
-              accept="image/*,.pdf"
-              onChange={(e) =>
-                setFieldValue("pgCertificate", e.target.files[0])
-              }
-            />
-            <ErrorMessage name="pgCertificate" component="div" />
+              <div className="form-actions">
+                <button type="submit" className="btn btn-primary" disabled={loading}>
+                  {loading ? "Creating PG..." : "Create PG"}
+                </button>
 
-            { errors && <p style={{ color: "red" }}> { JSON.stringify(errors) } </p> }
+                <Link to="/dashboard">
+                  <button type="button" className="btn btn-outline">
+                    Cancel
+                  </button>
+                </Link>
+              </div>
 
-            <button type="submit" disabled={loading}>
-              { loading ? "Creating..." : "Create PG" }
-            </button>
-          </Form>
-        )}
-      </Formik>
-
-      <br />
-
-      <Link to="/dashboard">
-        <button> Back to Dashboard </button>
-      </Link>
-
+            </Form>
+          )}
+        </Formik>
+      </div>
     </div>
+
   );
 }
