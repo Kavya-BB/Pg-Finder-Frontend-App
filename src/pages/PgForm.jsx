@@ -1,23 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
-import { createPg } from "../slices/pg-slice";
+import { createPg, updatePg } from "../slices/pg-slice";
 import "../styles/pg-form.css";
 
-export default function PgForm() {
-
+export default function PgForm({ isEdit = false, pgData = null, pgId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, errors } = useSelector((state) => {
-    return state.pg;
-  });
+  const { loading } = useSelector((state) => state.pg);
 
-  const initialValues = {
+  const initialValues = isEdit && pgData ? {
+    pgname: pgData.pgname,
+    description: pgData.description || "",
+    location: {
+      address: pgData.location.address,
+      coordinates: {
+        latitude: pgData.location.coordinates.latitude,
+        longitude: pgData.location.coordinates.longitude
+      }
+    },
+    roomTypes: pgData.roomTypes,
+    amenities: pgData.amenities || [],
+    pgPhotos: [],
+    pgCertificate: null
+  } : {
     pgname: "",
     description: "",
-    rent: "",
-    gender: "",
     location: {
       address: "",
       coordinates: {
@@ -25,222 +34,152 @@ export default function PgForm() {
         longitude: ""
       }
     },
-    roomTypes: [
-      {
-        roomType: "",
-        count: "",
-        rent: "",
-      },
-    ],
+    roomTypes: [{ roomType: "", count: "", rent: "" }],
     amenities: [],
     pgPhotos: [],
-    pgCertificate: null,
+    pgCertificate: null
   };
 
   const validate = (values) => {
     const errors = {};
-
-    if(!values.pgname) errors.pgname = "PG name is required";
-    if(!values.location.address) {
+    if (!values.pgname) errors.pgname = "PG name is required";
+    if (!values.location.address) {
       errors.location = { address: "Address is required" };
-    }
-    if(!values.location.coordinates.latitude) {
-      errors.location = {
-        ...errors.location,
-        coordinates: { latitude: "Latitude is required"}
-      };
-    }
-    if(!values.location.coordinates.longitude) {
-      errors.location = {
-        ...errors.location,
-        coordinates: { longitude: "Longitude is required" },
-      };
-    }
-    if(!values.pgCertificate) {
-      errors.pgCertificate = "PG Certificate is required";
     }
     return errors;
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
     const formData = new FormData();
-
     formData.append("pgname", values.pgname);
     formData.append("description", values.description);
-
     formData.append("location[address]", values.location.address);
-    formData.append(
-      "location[coordinates][latitude]",
-      values.location.coordinates.latitude
-    );
-    formData.append(
-      "location[coordinates][longitude]",
-      values.location.coordinates.longitude
-    );
-
+    formData.append("location[coordinates][latitude]",values.location.coordinates.latitude);
+    formData.append("location[coordinates][longitude]",values.location.coordinates.longitude);
     values.roomTypes.forEach((room, index) => {
       formData.append(`roomTypes[${index}][roomType]`, room.roomType);
       formData.append(`roomTypes[${index}][count]`, room.count);
       formData.append(`roomTypes[${index}][rent]`, room.rent);
     });
-
     values.amenities.forEach((a) => formData.append("amenities[]", a));
-
     values.pgPhotos.forEach((file) => {
       formData.append("pgPhotos", file);
     });
-
-    formData.append("pgCertificate", values.pgCertificate);
-
-    dispatch(createPg(formData)).then(() => navigate("/dashboard"));
+    if (values.pgCertificate) {
+      formData.append("pgCertificate", values.pgCertificate);
+    }
+    if (isEdit) {
+      dispatch(updatePg({ id: pgId, formData }))
+        .then(() => navigate("/dashboard"));
+    } else {
+      dispatch(createPg(formData))
+        .then(() => navigate("/dashboard"));
+    }
     setSubmitting(false);
-  }
+  };
 
   return (
     <div className="page">
       <div className="pg-form-card">
-        <div className="pg-form-header">
-          <h1>Add New PG</h1>
-          <p>Fill accurate details to get faster approval</p>
-        </div>
+        <h1>{isEdit ? "Edit PG" : "Add New PG"}</h1>
 
-        <Formik initialValues={initialValues} validate={validate} onSubmit={handleSubmit}>
+        <Formik
+          enableReinitialize
+          initialValues={initialValues}
+          validate={validate}
+          onSubmit={handleSubmit}
+        >
           {({ values, setFieldValue }) => (
             <Form encType="multipart/form-data" className="pg-form">
 
-              <section className="form-section">
-                <h3>🏠 PG Information</h3>
+              <label>PG Name</label>
+              <Field name="pgname" />
+              <ErrorMessage name="pgname" component="div" className="error" />
 
-                <label>PG Name</label>
-                <Field name="pgname" placeholder="Ex: Sunrise Men's PG" />
-                <ErrorMessage name="pgname" component="div" className="error" />
+              <label>Description</label>
+              <Field as="textarea" name="description" />
 
-                <label>Description</label>
-                <Field as="textarea" name="description" placeholder="Describe your PG..." />
-              </section>
+              <label>Address</label>
+              <Field name="location.address" />
 
-              <section className="form-section">
-                <h3>📍 Location</h3>
-
-                <Field name="location.address" placeholder="Full Address" />
-                <ErrorMessage name="location.address" component="div" className="error" />
-
-                <div className="two-col">
-                  <Field name="location.coordinates.latitude" placeholder="Latitude" />
-                  <Field name="location.coordinates.longitude" placeholder="Longitude" />
-                </div>
-              </section>
-
-              <section className="form-section">
-                <h3>🛏 Room Types</h3>
-
-                <FieldArray name="roomTypes">
-                  {({ push, remove }) => (
-                    <>
-                      {values.roomTypes.map((_, index) => (
-                        <div key={index} className="room-card">
-                          <Field
-                            name={`roomTypes[${index}].roomType`}
-                            placeholder="Room Type (Single / Double)"
-                          />
-                          <Field
-                            name={`roomTypes[${index}].count`}
-                            type="number"
-                            placeholder="Rooms"
-                          />
-                          <Field
-                            name={`roomTypes[${index}].rent`}
-                            type="number"
-                            placeholder="Rent (₹)"
-                          />
-
-                          {values.roomTypes.length > 1 && (
-                            <button
-                              type="button"
-                              className="btn btn-danger small"
-                              onClick={() => remove(index)}
-                            >
-                              Remove
-                            </button>
-                          )}
-                        </div>
-                      ))}
-
-                      <button
-                        type="button"
-                        className="btn btn-outline"
-                        onClick={() => push({ roomType: "", count: "", rent: "" })}
-                      >
-                        ➕ Add Another Room Type
-                      </button>
-                    </>
-                  )}
-                </FieldArray>
-              </section>
-
-              <section className="form-section">
-                <h3>✨ Amenities</h3>
-
-                <div className="amenities-grid">
-                  {["wifi", "food", "laundry"].map((amenity) => (
-                    <label key={amenity} className="amenity-chip">
-                      <input
-                        type="checkbox"
-                        checked={values.amenities.includes(amenity)}
-                        onChange={(e) =>
-                          setFieldValue(
-                            "amenities",
-                            e.target.checked
-                              ? [...values.amenities, amenity]
-                              : values.amenities.filter((a) => a !== amenity)
-                          )
-                        }
-                      />
-                      {amenity}
-                    </label>
-                  ))}
-                </div>
-              </section>
-
-              <section className="form-section">
-                <h3>📷 PG Photos</h3>
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={(e) =>
-                    setFieldValue("pgPhotos", Array.from(e.target.files))
-                  }
-                />
-
-                <h3>📄 PG Certificate</h3>
-                <input
-                  type="file"
-                  accept="image/*,.pdf"
-                  onChange={(e) =>
-                    setFieldValue("pgCertificate", e.target.files[0])
-                  }
-                />
-                <ErrorMessage name="pgCertificate" component="div" className="error" />
-              </section>
-
-              <div className="form-actions">
-                <button type="submit" className="btn btn-primary" disabled={loading}>
-                  {loading ? "Creating PG..." : "Create PG"}
-                </button>
-
-                <Link to="/dashboard">
-                  <button type="button" className="btn btn-outline">
-                    Cancel
-                  </button>
-                </Link>
+              <div className="two-col">
+                <Field name="location.coordinates.latitude" placeholder="Latitude" />
+                <Field name="location.coordinates.longitude" placeholder="Longitude" />
               </div>
+
+              <FieldArray name="roomTypes">
+                {({ push, remove }) => (
+                  <>
+                    {values.roomTypes.map((_, index) => (
+                      <div key={index}>
+                        <Field name={`roomTypes[${index}].roomType`} placeholder="Room Type" />
+                        <Field name={`roomTypes[${index}].count`} type="number" placeholder="Rooms" />
+                        <Field name={`roomTypes[${index}].rent`} type="number" placeholder="Rent" />
+                        {index > 0 && (
+                          <button type="button" onClick={() => remove(index)}>Remove</button>
+                        )}
+                      </div>
+                    ))}
+                    
+                    <button type="button" onClick={() => push({ roomType: "", count: "", rent: "" })}>
+                      Add Room
+                    </button>
+                  </>
+                )}
+              </FieldArray>
+
+              <h3>Amenities</h3>
+              {["wifi", "food", "laundry"].map((a) => (
+                <label key={a}>
+                  <input
+                    type="checkbox"
+                    checked={values.amenities.includes(a)}
+                    onChange={(e) =>
+                      setFieldValue(
+                        "amenities",
+                        e.target.checked
+                          ? [...values.amenities, a]
+                          : values.amenities.filter((x) => x !== a)
+                      )
+                    }
+                  />
+                  {a}
+                </label>
+              ))}
+
+              <h3>PG Photos</h3>
+              <input
+                type="file"
+                multiple
+                onChange={(e) =>
+                  setFieldValue("pgPhotos", Array.from(e.target.files))
+                }
+              />
+
+              {!isEdit && (
+                <>
+                  <h3>PG Certificate</h3>
+                  <input
+                    type="file"
+                    onChange={(e) =>
+                      setFieldValue("pgCertificate", e.target.files[0])
+                    }
+                  />
+                </>
+              )}
+
+              <button type="submit" disabled={loading}>
+                {isEdit ? "Update PG" : "Create PG"}
+              </button>
+
+              <Link to="/dashboard">
+                <button type="button">Cancel</button>
+              </Link>
 
             </Form>
           )}
         </Formik>
       </div>
     </div>
-
   );
 }

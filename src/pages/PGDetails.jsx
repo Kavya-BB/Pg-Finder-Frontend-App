@@ -107,7 +107,7 @@ export default function PGDetails() {
                     </div>
 
                     <div className="action-buttons">
-                        <button onClick={() => navigate(`/edit-pg`)}>
+                        <button onClick={() => navigate(`/edit-pg/${selectedPg._id}`)}>
                             Edit PG
                         </button>
                     

@@ -58,7 +58,7 @@ export default function App() {
             <li> <Link to="/pg-list"> Pg Lists </Link> </li>
             {(user.role != "user") && <li> <Link to="/pg-details/:id"> Pg Details </Link> </li>}
             { (user.role == "owner") && <li> <Link to="/pg-form"> Add PG </Link> </li> }
-            { (user.role == "owner") && <li> <Link to="/edit-pg"> Edit PG </Link> </li> }
+            { (user.role == "owner") && <li> <Link to="/edit-pg/:id"> Edit PG </Link> </li> }
             { (user.role == "user") && <li> <Link to="/public-pg/:id"> Public PG Page </Link> </li> }
             <li> <Link to={`/edit-profile/${user._id}`}> Edit My Profile </Link> </li>
             { (user.role == "admin") && <li> <Link to="/booking-list"> Booking List </Link> </li> }
@@ -98,7 +98,7 @@ export default function App() {
         <Route path="/pg-details/:id" element={<PGDetails />} />
         <Route path="/pg-form" element={<PgForm />} />
         {/* <Route path="/pg-form/:id" element={<PgForm />} /> */}
-        <Route path="/edit-pg" element={<EditPg />} />
+        <Route path="/edit-pg/:id" element={<EditPg />} />
         <Route path="/public-pg/:id" element={<PublicPg />} />
         <Route path="/edit-profile/:id" element={<EditProfile />} />
         <Route path="/booking-list" element={<BookingList />} />

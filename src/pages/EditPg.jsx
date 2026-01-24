@@ -1,22 +1,27 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { fetchPgById } from "../slices/pg-slice";
+import PgForm from "./PgForm";
 
 export default function EditPg() {
-    return (
-        <div>
-            <h1> Edit PG </h1>
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const { selectedPg, loading } = useSelector(state => state.pg);
 
-            <div>
-                {/* <Link to={`/pg-details/:id`}> */}
-                <Link to={``}>
-                    <button> Back to pg </button>
-                </Link>
-            </div>
+  useEffect(() => {
+    dispatch(fetchPgById(id));
+  }, [id]);
 
-            <div>
-                <Link to="/dashboard">
-                    <button> Back to Dashboard </button>
-                </Link>
-            </div>
-        </div>
-    )
+  if (loading || !selectedPg) {
+    return <p>Loading PG details...</p>;
+  }
+
+  return (
+    <PgForm
+      isEdit={true}
+      pgData={selectedPg}
+      pgId={id}
+    />
+  );
 }
