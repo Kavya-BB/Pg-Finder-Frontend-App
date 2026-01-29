@@ -12,7 +12,7 @@ export default function PgList() {
     const dispatch = useDispatch();
     const { user } = useContext(UserContext);
 
-    const { data, loading, errors } = useSelector((state) => {
+    const { data, loading, errors, searchText } = useSelector((state) => {
         return state.pg;
     });
 
@@ -47,17 +47,23 @@ export default function PgList() {
     };
 
     const filteredData = (() => {
-        if (user?.role === "user") {
-            return data;
+        let result = data;
+        if (user?.role !== "user") {
+            result = result.filter(pg => {
+                if (filter === "approved") return pg.isApproved;
+                if (filter === "pending") return !pg.isApproved;
+                if (filter === "verified") return pg.isVerified;
+                return true;
+            });
         }
-        return data.filter(pg => {
-            if (filter === "approved") return pg.isApproved;
-            if (filter === "pending") return !pg.isApproved;
-            if (filter === "verified") return pg.isVerified;
-            return true;
-        });
+        if (searchText) {
+            result = result.filter(pg =>
+                pg.pgname.toLowerCase().includes(searchText.toLowerCase()) ||
+                pg.location?.address?.toLowerCase().includes(searchText.toLowerCase())
+            );
+        }
+        return result;
     })();
-
 
     if(loading) {
         return <p> Loading PG data... </p>

@@ -28,7 +28,7 @@ export default function UserDashboard() {
                 <div style={cardStyle}>
                     <h3> View Bookings </h3>
                     <h2> 📄 </h2>
-                    <p> View or manage your bookings </p>
+                    <p> View your bookings </p>
                     <Link to="/user-bookings">
                         <button style={btnStyle}> My Bookings </button>
                     </Link>
@@ -47,7 +47,9 @@ export default function UserDashboard() {
                     <h3> View Payments </h3>
                     <h2> 💳 </h2>
                     <p> View your payment history </p>
-                    <button style={btnStyle}> My Payments </button>
+                    <Link to="/payment-list">
+                        <button style={btnStyle}> My Payments </button>
+                    </Link>
                 </div>
 
                 <div style={cardStyle}>
@@ -58,9 +60,7 @@ export default function UserDashboard() {
                         <button style={btnStyle}> My Profile </button>
                     </Link>
                 </div>     
-
             </div>
-
         </div>
     )
 }

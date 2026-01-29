@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { fetchOwnerBookings } from '../slices/booking-slice';
+import { fetchOwnerPayments } from '../slices/payment-slice';
 
 export default function OwnerDashboard() {
     const dispatch = useDispatch();
@@ -9,9 +10,11 @@ export default function OwnerDashboard() {
         return state.pg;
     });
     const { data: bookingData } = useSelector(state => state.booking);
+    const { payments } = useSelector((state) => state.payment);
 
     useEffect(() => {
         dispatch(fetchOwnerBookings());
+        dispatch(fetchOwnerPayments());
     }, [dispatch])
 
     if(loading) {
@@ -28,6 +31,7 @@ export default function OwnerDashboard() {
     const verifiedPgs = data.filter(pg => pg.isVerified).length;
     const totalBookings = bookingData.length;
     const totalRatings = data.reduce((sum, pg) => sum + (pg.ratingCount || 0), 0);
+    const totalPayments = payments.length;
 
     return (
         <div style={{ padding: "20px" }}>
@@ -93,7 +97,7 @@ export default function OwnerDashboard() {
                 <div style={cardStyle}>
                     <h3> View Ratings for PG </h3>
                     <h2> { totalRatings } </h2>
-                    <p> View all Ratings for my PGs </p>
+                    <p> View all ratings for my PGs </p>
                     <Link to="/owner-ratings">
                         <button style={btnStyle}> View Ratings </button>
                     </Link>
@@ -101,13 +105,21 @@ export default function OwnerDashboard() {
 
                 <div style={cardStyle}>
                     <h3> View Payments for PG </h3>
-                    <h2> {  } </h2>
+                    <h2> { totalPayments } </h2>
                     <p> View all payments for my PGs </p>
-                    <button style={btnStyle}> View Payments </button>
+                    <Link to="/payment-list">
+                        <button style={btnStyle}> View Payments </button>
+                    </Link>
                 </div>
 
+                <div style={cardStyle}>
+                    <h3> View my Profile </h3>
+                    <p> Update personal details </p>
+                    <Link to="/account">
+                        <button style={btnStyle}> My Profile </button>
+                    </Link>
+                </div>
             </div>
-
         </div>
     )
 }

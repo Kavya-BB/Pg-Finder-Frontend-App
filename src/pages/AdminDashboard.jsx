@@ -47,7 +47,9 @@ export default function AdminDashboard() {
                     <div className="admin-card">
                         <h3> Total Payments </h3>
                         <p> View all payments </p>
-                        <button className="btn secondary"> View Payments </button>
+                        <Link to="/payment-list">
+                            <button className="btn secondary"> View Payments </button>
+                        </Link>
                     </div>
 
                     <div className="admin-card">
@@ -58,12 +60,19 @@ export default function AdminDashboard() {
                         </Link>
                     </div>
 
-                    <div className="admin-card highlight">
-                        <h3> Reports </h3>
-                        <p> Analytics & System Reports </p>
-                        <button className="btn secondary"> View Reports</button>
+                    <div className="admin-card">
+                        <h3> View my Profile </h3>
+                        <p> Update personal details </p>
+                        <Link to="/account">
+                            <button className="btn primary"> My Profile </button>
+                        </Link>
                     </div>
 
+                    <div className="admin-card">
+                        <h3> Reports </h3>
+                        <p> Analytics & System Reports </p>
+                        <button className="btn primary"> View Reports</button>
+                    </div>
             </div>
         </div>
     )

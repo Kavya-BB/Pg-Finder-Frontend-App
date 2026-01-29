@@ -115,7 +115,8 @@ const pgSlice = createSlice({
         selectedPg: null,
         errors: null,
         nearby: [],
-        loading: false
+        loading: false,
+        searchText: ""
     },
     reducers: {
         resetPg: (state) => {
@@ -124,6 +125,10 @@ const pgSlice = createSlice({
             state.nearby = [];
             state.errors = null;
             state.loading = false;
+            state.searchText = "";
+        },
+        setSearchText: (state, action) => {
+            state.searchText = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -271,6 +276,6 @@ const pgSlice = createSlice({
     }
 });
 
-export const { resetPg } = pgSlice.actions;
+export const { resetPg, setSearchText } = pgSlice.actions;
 
 export default pgSlice.reducer;
