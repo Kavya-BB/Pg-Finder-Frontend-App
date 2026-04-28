@@ -47,7 +47,6 @@ export default function Register() {
                         <label>Select Role</label>
                         <select name="role" value={formik.values.role} onChange={formik.handleChange}>
                             <option value=""> select role </option>
-                            <option value="admin"> admin </option>
                             <option value="owner"> owner </option>
                             <option value="user"> user </option>
                         </select>
